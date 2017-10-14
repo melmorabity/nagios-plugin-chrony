@@ -1,19 +1,18 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-# Copyright (C) 2016 Mohamed El Morabity <melmorabity@fedoraproject.com>
+# Copyright (C) 2016, 2017 Mohamed El Morabity <melmorabity@fedoraproject.com>
 #
-# This module is free software: you can redistribute it and/or modify it under
-# the terms of the GNU General Public License as published by the Free Software
-# Foundation, either version 3 of the License, or (at your option) any later
-# version.
+# This module is free software: you can redistribute it and/or modify it under the terms of the GNU
+# General Public License as published by the Free Software Foundation, either version 3 of the
+# License, or (at your option) any later version.
 #
-# This software is distributed in the hope that it will be useful, but WITHOUT
-# ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
-# FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# This software is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without
+# even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+# General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# this program. If not, see <http://www.gnu.org/licenses/>.
+# You should have received a copy of the GNU General Public License along with this program. If not,
+# see <http://www.gnu.org/licenses/>.
 
 
 import re
@@ -28,9 +27,12 @@ helper = pynag.Plugins.PluginHelper()
 # Specify arguments to the plugin
 helper.parser.description = 'This plugin checks the clock offset of chronyd.'
 helper.parser.add_option('-H', '--hostname', help='Host name or IP address')
-helper.parser.add_option('-p', '--port', type='int', default=DEFAULT_CHRONYD_PORT, help='Chrony UDP port (default: %i)' % DEFAULT_CHRONYD_PORT)
-helper.parser.add_option('-w', '--warning', type='float', help='Offset to result in warning status (in seconds)')
-helper.parser.add_option('-c', '--critical', type='float', help='Offset to result in critical status (in seconds)')
+helper.parser.add_option('-p', '--port', type='int', default=DEFAULT_CHRONYD_PORT,
+                         help='Chrony UDP port (default: %i)' % DEFAULT_CHRONYD_PORT)
+helper.parser.add_option('-w', '--warning', type='float',
+                         help='Offset to result in warning status (in seconds)')
+helper.parser.add_option('-c', '--critical', type='float',
+                         help='Offset to result in critical status (in seconds)')
 helper.parse_arguments()
 
 if not helper.options.hostname:
@@ -48,19 +50,19 @@ if helper.options.show_debug:
     command.append('-d')
 
 try:
-    p = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    output = p.communicate()[0]
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    output = process.communicate()[0]
 except OSError as e:
     helper.status(pynag.Plugins.unknown)
     helper.add_summary(str(e))
     helper.exit()
 
-if p.returncode != 0:
+if process.returncode != 0:
     helper.status(pynag.Plugins.critical)
     helper.add_summary(output)
     helper.exit()
-    
-matcher = re.search("^Leap status\s*:\s*(.*)$", output, flags=re.MULTILINE)
+
+matcher = re.search(r'^Leap status\s*:\s*(.*)$', output, flags=re.MULTILINE)
 leap_status = matcher.group(1)
 if leap_status == 'Not synchronised':
     helper.status(pynag.Plugins.critical)
@@ -71,7 +73,8 @@ if leap_status == 'Unknown':
     helper.add_summary('Server status is unknown')
     helper.exit()
 
-matcher = re.search("^System time\s*:\s*([0-9]+\.[0-9]*) seconds (slow|fast)", output, flags=re.MULTILINE)
+matcher = re.search(r'^System time\s*:\s*([0-9]+\.[0-9]*) seconds (slow|fast)', output,
+                    flags=re.MULTILINE)
 offset = float(matcher.group(1))
 if matcher.group(2) == 'fast':
     offset = -offset
