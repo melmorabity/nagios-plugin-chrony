@@ -50,7 +50,7 @@ if helper.options.show_debug:
     command.append('-d')
 
 try:
-    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None)
     output = process.communicate()[0]
 except OSError as e:
     helper.status(pynag.Plugins.unknown)
