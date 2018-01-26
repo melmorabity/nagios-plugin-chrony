@@ -8,7 +8,7 @@ Mohamed El Morabity <melmorabity -(at)- fedoraproject.org>
 
 ## Usage
 
-    check_chrony.py --hostname HOSTNAME --warning WARNING --critical CRITICAL [--port PORT]
+    check_chrony.py [--hostname HOSTNAME] --warning WARNING --critical CRITICAL [--port PORT]
 
 ### Options
 
@@ -35,4 +35,4 @@ Offset to result in critical status (in seconds)
 ## Examples
 
     $ ./check_chrony -H localhost -w 0.5 -c 1
-    OK - Offset -4.2285e-05 seconds | 'offset'=-0.000042285s;;;;
+    OK: Offset 0.000590362 seconds | 'offset'=0.000590362s;0.5;1;;
