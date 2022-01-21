@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 # Copyright (C) 2016-2018 Mohamed El Morabity <melmorabity@fedoraproject.com>
@@ -52,7 +52,7 @@ command = ['chronyc', '-h', plugin['host'], '-p', str(plugin['port']), 'tracking
 
 try:
     process = subprocess.Popen(command, stdout=subprocess.PIPE, stderr=None)
-    output = process.communicate()[0]
+    output = process.communicate()[0].decode('utf-8')
 except OSError as ex:
     plugin.nagios_exit(Plugins.UNKNOWN, str(ex))
 
